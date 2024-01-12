@@ -7,7 +7,7 @@ from PyQt5 import uic
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("untitled.ui", self)
+        uic.loadUi("main.ui", self)
         con = sqlite3.connect("coffee.sqlite")
         cur = con.cursor()
         result = cur.execute(f"SELECT * FROM Coffee ").fetchall()
