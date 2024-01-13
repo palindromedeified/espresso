@@ -2,17 +2,15 @@ import sqlite3
 import sys
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication, QHeaderView, QTableWidgetItem, QAbstractItemView, QDialog
+from untitled import Ui_MainWindow
+from addEditCoffeeForm import Ui_Form
 
 
-# from untitled import Ui_MainWindow
-# from addEditCoffeeForm import Ui_Form
-
-
-class MainWindow(QMainWindow):  # , Ui_MainWindow
+class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("main.ui", self)
-        # self.setupUi(self)
+        # uic.loadUi("main.ui", self)
+        self.setupUi(self)
         self.from_db_to_table()
         self.item = -1
         self.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -35,7 +33,7 @@ class MainWindow(QMainWindow):  # , Ui_MainWindow
         self.from_db_to_table()
 
     def from_db_to_table(self):
-        con = sqlite3.connect("coffee.sqlite")
+        con = sqlite3.connect("data/coffee.sqlite")
         cur = con.cursor()
         self.result = cur.execute(f"SELECT * FROM Coffee ").fetchall()
         con.close()
@@ -46,29 +44,28 @@ class MainWindow(QMainWindow):  # , Ui_MainWindow
                 self.tableWidget.setItem(i, j, QTableWidgetItem(str(self.result[i][j])))
 
 
-class AddEditCoffeeForm(QDialog):  # , Ui_Form
+class AddEditCoffeeForm(QDialog, Ui_Form):
     def __init__(self, flag, lst=None):
         super(AddEditCoffeeForm, self).__init__()
-        # self.setupUi(self)
-        uic.loadUi("addEditCoffeeForm.ui", self)
+        self.setupUi(self)
+        # uic.loadUi("addEditCoffeeForm.ui", self)
         self.lineEdits = [self.lineEdit, self.lineEdit_2, self.lineEdit_3, self.lineEdit_4, self.lineEdit_5,
                           self.lineEdit_6]
         self.flag = flag
         self.lst = lst
         self.some_func()
-        print(self.lst)
         self.pushButton.clicked.connect(self.ok_func)
 
     def ok_func(self):
         texts = [i.text() for i in self.lineEdits]
-        texts = [self.lst[i + 1] if texts[i] == '' else texts[i] for i in range(6)]
-        print(texts)
-        con = sqlite3.connect("coffee.sqlite")
+        con = sqlite3.connect("data/coffee.sqlite")
         cur = con.cursor()
         if self.flag:
+            texts = [self.lst[i + 1] if texts[i] == '' else texts[i] for i in range(6)]
             cur.execute(
                 f"UPDATE coffee SET sort_name = '{texts[0]}', roasting = '{texts[1]}', ground_grains = '{texts[2]}', taste_desc = '{texts[3]}', price = '{texts[4]}', volume = '{texts[5]}' WHERE id = '{self.lst[0]}'").fetchall()
         else:
+            texts = ['Null' if texts[i] == '' else texts[i] for i in range(6)]
             cur.execute(
                 f"INSERT INTO coffee(sort_name, roasting, ground_grains, taste_desc, price, volume) VALUES('{texts[0]}', '{texts[1]}', '{texts[2]}','{texts[3]}', '{texts[4]}', '{texts[5]}')").fetchall()
         con.commit()
