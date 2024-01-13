@@ -1,6 +1,5 @@
 import sqlite3
 import sys
-from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication, QHeaderView, QTableWidgetItem, QAbstractItemView, QDialog
 from untitled import Ui_MainWindow
 from addEditCoffeeForm import Ui_Form
@@ -33,7 +32,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.from_db_to_table()
 
     def from_db_to_table(self):
-        con = sqlite3.connect("data/coffee.sqlite")
+        con = sqlite3.connect(r"C:\Users\79968\PycharmProjects\espresso\data\coffee.sqlite")
         cur = con.cursor()
         self.result = cur.execute(f"SELECT * FROM Coffee ").fetchall()
         con.close()
@@ -58,7 +57,7 @@ class AddEditCoffeeForm(QDialog, Ui_Form):
 
     def ok_func(self):
         texts = [i.text() for i in self.lineEdits]
-        con = sqlite3.connect("data/coffee.sqlite")
+        con = sqlite3.connect(r"C:\Users\79968\PycharmProjects\espresso\data\coffee.sqlite")
         cur = con.cursor()
         if self.flag:
             texts = [self.lst[i + 1] if texts[i] == '' else texts[i] for i in range(6)]
