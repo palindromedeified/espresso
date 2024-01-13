@@ -8,7 +8,6 @@ from addEditCoffeeForm import Ui_Form
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        # uic.loadUi("main.ui", self)
         self.setupUi(self)
         self.from_db_to_table()
         self.item = -1
@@ -47,7 +46,6 @@ class AddEditCoffeeForm(QDialog, Ui_Form):
     def __init__(self, flag, lst=None):
         super(AddEditCoffeeForm, self).__init__()
         self.setupUi(self)
-        # uic.loadUi("addEditCoffeeForm.ui", self)
         self.lineEdits = [self.lineEdit, self.lineEdit_2, self.lineEdit_3, self.lineEdit_4, self.lineEdit_5,
                           self.lineEdit_6]
         self.flag = flag
